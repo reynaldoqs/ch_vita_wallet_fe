@@ -1,5 +1,5 @@
-import { apiClient } from './apiClient';
+// import { apiClient } from './apiClient';
 
-export const transactionService = {
-  getTransactions: () => apiClient.get<unknown[]>('/transactions'),
-};
+// export const transactionService = {
+//   getTransactions: () => apiClient.get<unknown[]>('/transactions'),
+// };

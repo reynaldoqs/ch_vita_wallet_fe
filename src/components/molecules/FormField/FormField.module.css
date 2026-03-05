@@ -1,0 +1,7 @@
+.field {
+  display: block;
+}
+
+.field + .field {
+  margin-top: 1rem;
+}

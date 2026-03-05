@@ -1,2 +1,2 @@
-export { AuthLayout } from './AuthLayout/AuthLayout'
-export { DashboardLayout } from './DashboardLayout/DashboardLayout'
+export { AuthLayout } from "../../features/Login/components/templates/AuthLayout/AuthLayout";
+export { DashboardLayout } from "./DashboardLayout/DashboardLayout";
