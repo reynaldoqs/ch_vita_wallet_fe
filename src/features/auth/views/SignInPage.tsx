@@ -1,10 +1,11 @@
+import amico from "@/assets/images/amico.svg";
 import { LoginForm } from "../components";
 import { AuthLayout } from "../components/templates/AuthLayout/AuthLayout";
 
-export function LoginPage() {
+export function SignInPage() {
 	return (
-		<AuthLayout>
-			<LoginForm />
+		<AuthLayout aside={<LoginForm />}>
+			<img src={amico} alt="Amico" />
 		</AuthLayout>
 	);
 }

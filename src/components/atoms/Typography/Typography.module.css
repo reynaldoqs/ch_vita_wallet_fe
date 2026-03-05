@@ -1,0 +1,41 @@
+.title {
+	font-size: 45px;
+	font-weight: 600;
+	line-height: 55px;
+}
+
+.subtitle1 {
+	font-size: 28px;
+	font-weight: 600;
+	line-height: 36px;
+}
+
+.subtitle2 {
+	font-size: 24px;
+	font-weight: 400;
+	line-height: 32px;
+}
+
+.button {
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 18px;
+}
+
+.body {
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 18px;
+}
+
+.caption1 {
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 16px;
+}
+
+.caption2 {
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 15px;
+}

@@ -1,2 +1,35 @@
 .button {
+	font-family: inherit;
+	padding: 16px 32px;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	text-align: center;
+	transition: opacity 0.2s;
+}
+
+.button:disabled {
+	cursor: not-allowed;
+	background: var(--color-gray3) !important;
+	color: var(--color-gray1) !important;
+	border-color: transparent !important;
+}
+
+.variantPrimary {
+	background: var(--gradient-blue);
+	color: var(--color-white);
+}
+
+.variantSecondary {
+	background: var(--color-white);
+	color: var(--color-blue2);
+	border: 2px solid var(--color-blue2);
+}
+
+.expanded {
+	width: 100%;
+}
+
+.fitContent {
+	width: fit-content;
 }

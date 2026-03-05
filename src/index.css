@@ -1,3 +1,15 @@
+:root {
+	--color-black: #010e11;
+	--color-gray1: #b9c1c2;
+	--color-gray2: #dee0e0;
+	--color-gray3: #f5f6f6;
+	--color-white: #f9f9fa;
+	--color-blue1: #167287;
+	--color-blue2: #05bcb9;
+	--color-red: #ce3434;
+	--gradient-blue: linear-gradient(90deg, #05bcb9 0%, #167287 100%);
+}
+
 *,
 *::before,
 *::after {
@@ -8,13 +20,16 @@
 
 html {
 	-webkit-text-size-adjust: 100%;
+	font-size: 16px;
 	line-height: 1.5;
 }
 
 body {
 	min-height: 100vh;
 	text-rendering: optimizeLegibility;
-	font-family: "Inter", sans-serif;
+	font-family: "Open Sans", sans-serif;
+	background-color: var(--color-gray3);
+	color: var(--color-black);
 }
 
 img,
