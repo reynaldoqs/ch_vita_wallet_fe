@@ -2,40 +2,47 @@
 	font-size: 45px;
 	font-weight: 600;
 	line-height: 55px;
+	width: fit-content;
 }
 
 .subtitle1 {
 	font-size: 28px;
 	font-weight: 600;
 	line-height: 36px;
+	width: fit-content;
 }
 
 .subtitle2 {
 	font-size: 24px;
 	font-weight: 400;
 	line-height: 32px;
+	width: fit-content;
 }
 
 .button {
 	font-size: 16px;
 	font-weight: 600;
 	line-height: 18px;
+	width: fit-content;
 }
 
 .body {
 	font-size: 16px;
 	font-weight: 400;
 	line-height: 18px;
+	width: fit-content;
 }
 
 .caption1 {
 	font-size: 14px;
 	font-weight: 400;
 	line-height: 16px;
+	width: fit-content;
 }
 
 .caption2 {
 	font-size: 12px;
 	font-weight: 400;
 	line-height: 15px;
+	width: fit-content;
 }

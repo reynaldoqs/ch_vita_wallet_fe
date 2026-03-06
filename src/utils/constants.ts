@@ -1,7 +1,5 @@
-import type { CurrencyIconName } from "@/components/atoms";
-
-export const CURRENCIES = ["USD", "EUR", "GBP"] as const;
-export const CURRENCY_LABELS: Record<CurrencyIconName, string> = {
+export const CURRENCIES = ["USD", "CLP", "BTC", "USDT", "USDC"] as const;
+export const CURRENCY_LABELS: Record<(typeof CURRENCIES)[number], string> = {
 	USD: "Dólar",
 	CLP: "Peso Chileno",
 	USDT: "Tether",
