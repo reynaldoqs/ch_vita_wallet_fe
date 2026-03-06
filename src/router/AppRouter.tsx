@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { ExchangePage } from "@/features/dashboard";
+import { DashboardLayout } from "@/features/dashboard/components";
+import { HomePage } from "@/features/dashboard/views/HomePage";
 import { SignInPage } from "../features/auth/views/SignInPage";
 import { SignUpPage } from "../features/auth/views/SignUpPage";
-import { DashboardPage } from "../features/Dashboard/DashboardPage";
-import { ExchangePage } from "../features/Exchange/ExchangePage";
-import { TransactionsPage } from "../features/Transactions/TransactionsPage";
 import { PrivateRoute } from "./PrivateRoute";
 
 const router = createBrowserRouter([
@@ -12,9 +12,14 @@ const router = createBrowserRouter([
 	{
 		element: <PrivateRoute />,
 		children: [
-			{ path: "/", element: <DashboardPage /> },
-			{ path: "/exchange", element: <ExchangePage /> },
-			{ path: "/transactions", element: <TransactionsPage /> },
+			{
+				path: "/",
+				element: <DashboardLayout />,
+				children: [
+					{ index: true, element: <HomePage /> },
+					{ path: "intercambiar", element: <ExchangePage /> },
+				],
+			},
 		],
 	},
 ]);
