@@ -1,0 +1,12 @@
+.layout {
+	padding: 64px 32px;
+}
+
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 64px;
+	width: 100%;
+	max-width: 892px;
+	margin: 0 auto;
+}
