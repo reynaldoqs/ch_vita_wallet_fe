@@ -2,8 +2,13 @@ import type { Balance } from "@/types";
 import { CURRENCIES } from "./constants";
 
 export function formatCurrency(amount: number, currency: string): string {
-	const [int, dec] = amount.toFixed(2).split(".");
-	const intFormatted = int.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+	const maxDecimals = 10;
+	const fixed = amount.toFixed(maxDecimals);
+	const [intStr, decStr] = fixed.split(".");
+	const decTrimmed = decStr.replace(/0+$/, "") || "00";
+	const dec =
+		decTrimmed.length <= 2 ? decTrimmed.padEnd(2, "0") : decTrimmed.slice(0, 8);
+	const intFormatted = intStr.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 	const formatted = `${intFormatted},${dec}`;
 	const isDollar = /^(USD|CLP)$/i.test(currency);
 	return isDollar ? `$ ${formatted}` : formatted;

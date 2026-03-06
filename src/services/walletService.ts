@@ -1,6 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "@/store";
-import { type Balance, balanceSchema } from "@/types";
+import {
+	type Balance,
+	balanceSchema,
+	type CurrencyRates,
+	currencyRatesSchema,
+	type TransactionsResponse,
+	transactionsResponseSchema,
+} from "@/types";
 import { getZodErrorMessage } from "@/utils/error";
 
 export const walletService = createApi({
@@ -29,7 +36,26 @@ export const walletService = createApi({
 				return parsed.data;
 			},
 		}),
+		transactions: builder.query<TransactionsResponse, void>({
+			query: () => "transactions",
+			keepUnusedDataFor: 0,
+			transformResponse: (response: unknown) => {
+				const parsed = transactionsResponseSchema.safeParse(response);
+				if (!parsed.success) throw new Error(getZodErrorMessage(parsed.error));
+				return parsed.data;
+			},
+		}),
+		currencyRates: builder.query<CurrencyRates, void>({
+			query: () => "prices",
+			keepUnusedDataFor: 60 * 60 * 2, // 2 hours
+			transformResponse: (response: unknown) => {
+				const parsed = currencyRatesSchema.safeParse(response);
+				if (!parsed.success) throw new Error(getZodErrorMessage(parsed.error));
+				return parsed.data;
+			},
+		}),
 	}),
 });
 
-export const { useBalancesQuery } = walletService;
+export const { useBalancesQuery, useCurrencyRatesQuery, useTransactionsQuery } =
+	walletService;
