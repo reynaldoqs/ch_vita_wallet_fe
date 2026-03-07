@@ -10,7 +10,7 @@ export type User = z.infer<typeof userSchema>;
 export const signUpRequestSchema = z
 	.object({
 		email: z.email(),
-		password: z.string().min(8),
+		password: z.string().min(4),
 		password_confirmation: z.string(),
 	})
 	.refine((data) => data.password === data.password_confirmation, {
@@ -29,7 +29,7 @@ export type SignUpResponse = z.infer<typeof signUpResponseSchema>;
 
 export const loginRequestSchema = z.object({
 	email: z.email(),
-	password: z.string(),
+	password: z.string().min(4),
 });
 
 export type LoginRequest = z.infer<typeof loginRequestSchema>;

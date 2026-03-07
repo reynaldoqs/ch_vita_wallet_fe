@@ -1,18 +1,31 @@
+import { useForm } from "@tanstack/react-form";
 import { Link, useNavigate } from "react-router-dom";
 import { sileo } from "sileo";
 import { Button, Input, Label, Typography } from "@/components/atoms";
 import { useLoginMutation } from "@/services/authService";
+import { type LoginRequest, loginRequestSchema } from "@/types/auth.types";
 import { getErrorMessage } from "@/utils";
 import styles from "./LoginForm.module.css";
 
 export function LoginForm() {
-	const [login, { isLoading }] = useLoginMutation();
+	const [login] = useLoginMutation();
 	const navigate = useNavigate();
-	const submitForm = async (formData: FormData) => {
-		const email = formData.get("email") as string;
-		const password = formData.get("password") as string;
 
-		sileo.promise(login({ email, password }).unwrap(), {
+	const form = useForm({
+		defaultValues: {
+			email: "",
+			password: "",
+		},
+		validators: {
+			onChange: loginRequestSchema,
+		},
+		onSubmit: async (data) => {
+			await submitForm(data.value);
+		},
+	});
+
+	const submitForm = async (formData: LoginRequest) => {
+		sileo.promise(login(formData).unwrap(), {
 			success: (data) => {
 				console.log(data);
 				navigate("/");
@@ -34,42 +47,74 @@ export function LoginForm() {
 			},
 		});
 	};
+
 	return (
-		<form className={styles.form} action={submitForm}>
+		<form
+			className={styles.form}
+			onSubmit={(e) => {
+				e.preventDefault();
+				form.handleSubmit();
+			}}
+		>
 			<Typography variant="title" as="h1" className={styles.title}>
 				Iniciar sesión
 			</Typography>
 
-			<div>
-				<Label htmlFor="email">Email</Label>
-				<Input
-					type="email"
-					name="email"
-					placeholder="juan@gmail.com"
-					required
-					disabled={isLoading}
-				/>
-			</div>
-			<div className={styles.forgotPassword}>
-				<Label htmlFor="password">Password</Label>
-				<Input
-					type="password"
-					name="password"
-					placeholder="Escribe tu contraseña"
-					required
-					disabled={isLoading}
-				/>
-				<Typography variant="caption2">¿Olvidaste tu contraseña?</Typography>
-			</div>
-			<Button
-				type="submit"
-				variant="primary"
-				expanded
-				disabled={isLoading}
-				className={styles.action}
+			<form.Field name="email">
+				{(field) => (
+					<div>
+						<Label htmlFor={field.name}>Email</Label>
+						<Input
+							type="email"
+							id={field.name}
+							placeholder="juan@gmail.com"
+							value={field.state.value}
+							onChange={(e) => field.handleChange(e.target.value)}
+						/>
+					</div>
+				)}
+			</form.Field>
+			<form.Field name="password">
+				{(field) => (
+					<div>
+						<Label htmlFor={field.name}>Password</Label>
+						<Input
+							type="password"
+							id={field.name}
+							placeholder="Escribe tu contraseña"
+							value={field.state.value}
+							onChange={(e) => field.handleChange(e.target.value)}
+						/>
+					</div>
+				)}
+			</form.Field>
+			<Typography variant="caption2" className={styles.forgotPassword}>
+				¿Olvidaste tu contraseña?
+			</Typography>
+			<form.Subscribe
+				selector={(state) => [
+					state.canSubmit,
+					state.isSubmitting,
+					state.values.email,
+					state.values.password,
+				]}
 			>
-				Iniciar sesión
-			</Button>
+				{([canSubmit, isSubmitting, email, password]) => {
+					const isEmpty =
+						!String(email ?? "").trim() || !String(password ?? "").trim();
+					return (
+						<Button
+							type="submit"
+							variant="primary"
+							expanded
+							disabled={isEmpty || !canSubmit || Boolean(isSubmitting)}
+							className={styles.action}
+						>
+							{isSubmitting ? "..." : "Iniciar sesión"}
+						</Button>
+					);
+				}}
+			</form.Subscribe>
 			<Typography variant="body" as="p" className={styles.footer}>
 				¿No tienes cuenta? <Link to="/signup">Crear cuenta</Link>
 			</Typography>

@@ -10,9 +10,9 @@
 
 .button:disabled {
 	cursor: not-allowed;
-	background: var(--color-gray3) !important;
-	color: var(--color-gray1) !important;
-	border-color: transparent !important;
+	background: var(--color-gray2);
+	color: var(--color-gray3);
+	border-color: transparent;
 }
 
 .variantPrimary {

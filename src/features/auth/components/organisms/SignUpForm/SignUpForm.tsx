@@ -1,21 +1,32 @@
+import { useForm } from "@tanstack/react-form";
 import { Link, useNavigate } from "react-router-dom";
 import { sileo } from "sileo";
 import { Button, Input, Label, Typography } from "@/components/atoms";
 import { useSignUpMutation } from "@/services/authService";
+import { type SignUpRequest, signUpRequestSchema } from "@/types/auth.types";
 import { getErrorMessage } from "@/utils";
 import styles from "./SignUpForm.module.css";
 
 export function SignUpForm() {
-	const [signUp, { isLoading }] = useSignUpMutation();
+	const [signUp] = useSignUpMutation();
 	const navigate = useNavigate();
-	const submitForm = async (formData: FormData) => {
-		const email = formData.get("email") as string;
-		const password = formData.get("password") as string;
-		const password_confirmation = formData.get(
-			"password_confirmation",
-		) as string;
 
-		sileo.promise(signUp({ email, password, password_confirmation }).unwrap(), {
+	const form = useForm({
+		defaultValues: {
+			email: "",
+			password: "",
+			password_confirmation: "",
+		},
+		validators: {
+			onChange: signUpRequestSchema,
+		},
+		onSubmit: async (data) => {
+			await submitForm(data.value);
+		},
+	});
+
+	const submitForm = async (formData: SignUpRequest) => {
+		sileo.promise(signUp(formData).unwrap(), {
 			success: () => {
 				navigate("/");
 				return {
@@ -36,53 +47,96 @@ export function SignUpForm() {
 			},
 		});
 	};
+
 	return (
-		<form className={styles.form} action={submitForm}>
+		<form
+			className={styles.form}
+			onSubmit={(e) => {
+				e.preventDefault();
+				form.handleSubmit();
+			}}
+		>
 			<Typography variant="title" as="h1" className={styles.title}>
 				Crear cuenta
 			</Typography>
 
-			<div>
-				<Label htmlFor="email">Email</Label>
-				<Input
-					type="email"
-					name="email"
-					placeholder="juan@gmail.com"
-					required
-					disabled={isLoading}
-				/>
-			</div>
-			<div>
-				<Label htmlFor="password">Password</Label>
-				<Input
-					type="password"
-					name="password"
-					placeholder="Mínimo 8 caracteres"
-					required
-					minLength={8}
-					disabled={isLoading}
-				/>
-			</div>
-			<div>
-				<Label htmlFor="password_confirmation">Confirmar password</Label>
-				<Input
-					type="password"
-					name="password_confirmation"
-					placeholder="Repite tu contraseña"
-					required
-					minLength={8}
-					disabled={isLoading}
-				/>
-			</div>
-			<Button
-				type="submit"
-				variant="primary"
-				expanded
-				disabled={isLoading}
-				className={styles.action}
+			<form.Field name="email">
+				{(field) => (
+					<div>
+						<Label htmlFor={field.name}>Email</Label>
+						<Input
+							type="email"
+							id={field.name}
+							placeholder="juan@gmail.com"
+							value={field.state.value}
+							onChange={(e) => field.handleChange(e.target.value)}
+						/>
+					</div>
+				)}
+			</form.Field>
+			<form.Field name="password">
+				{(field) => (
+					<div>
+						<Label htmlFor={field.name}>Password</Label>
+						<Input
+							type="password"
+							id={field.name}
+							placeholder="Mínimo 8 caracteres"
+							value={field.state.value}
+							onChange={(e) => field.handleChange(e.target.value)}
+						/>
+					</div>
+				)}
+			</form.Field>
+			<form.Field name="password_confirmation">
+				{(field) => (
+					<div>
+						<Label htmlFor={field.name}>Confirmar password</Label>
+						<Input
+							type="password"
+							id={field.name}
+							placeholder="Repite tu contraseña"
+							value={field.state.value}
+							onChange={(e) => field.handleChange(e.target.value)}
+						/>
+					</div>
+				)}
+			</form.Field>
+
+			<form.Subscribe
+				selector={(state) => [
+					state.canSubmit,
+					state.isSubmitting,
+					state.values.email,
+					state.values.password,
+					state.values.password_confirmation,
+				]}
 			>
-				Crear cuenta
-			</Button>
+				{([
+					canSubmit,
+					isSubmitting,
+					email,
+					password,
+					password_confirmation,
+				]) => {
+					const isEmpty =
+						!String(email ?? "").trim() ||
+						!String(password ?? "").trim() ||
+						!String(password_confirmation ?? "").trim();
+					return (
+						<Button
+							type="submit"
+							variant="primary"
+							expanded
+							disabled={isEmpty || !canSubmit || Boolean(isSubmitting)}
+							className={styles.action}
+						>
+							{isSubmitting ? "..." : "Crear cuenta"}
+						</Button>
+					);
+				}}
+			</form.Subscribe>
+
 			<Typography variant="caption1">
 				(DEV) Al crear tu cuenta recibirás $10,000 USD para testear la
 				plataforma. 🚀💰
