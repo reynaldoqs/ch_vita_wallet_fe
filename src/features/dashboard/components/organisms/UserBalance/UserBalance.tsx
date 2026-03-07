@@ -8,7 +8,9 @@ import { BalanceCard } from "../../molecules";
 import styles from "./UserBalance.module.css";
 
 export function UserBalance() {
-	const { data: balances, isLoading } = useBalancesQuery();
+	const { data: balances, isLoading } = useBalancesQuery(undefined, {
+		refetchOnMountOrArgChange: true,
+	});
 	const { user } = useAppSelector((state) => state.auth);
 	const flattenedBalances = flattenBalance(balances);
 	return (

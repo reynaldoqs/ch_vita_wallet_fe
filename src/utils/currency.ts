@@ -1,5 +1,38 @@
-import type { Balance } from "@/types";
-import { CURRENCIES } from "./constants";
+import type { Balance, Prices } from "@/types";
+import { CRYPTO_CURRENCIES, CURRENCIES } from "./constants";
+
+const BASE_ASSETS = CRYPTO_CURRENCIES;
+
+export function getConvertedAmount(
+	prices: Prices | undefined,
+	from: string,
+	to: string,
+	amount: number,
+): number {
+	if (!prices || from === to || amount === 0) return amount;
+
+	if (from in prices && prices[from as keyof Prices][to] !== undefined) {
+		const sellRate = Number(prices[from as keyof Prices][to].sell);
+		return amount * sellRate;
+	}
+
+	if (to in prices && prices[to as keyof Prices][from] !== undefined) {
+		const buyRate = Number(prices[to as keyof Prices][from].buy);
+		return amount / buyRate;
+	}
+
+	for (const baseKey of BASE_ASSETS) {
+		const rates = prices[baseKey];
+		const fromRate = rates?.[from];
+		const toRate = rates?.[to];
+		if (fromRate && toRate) {
+			const amountInBase = amount / Number(fromRate.buy);
+			return amountInBase * Number(toRate.sell);
+		}
+	}
+
+	return 0;
+}
 
 export function formatCurrency(amount: number, currency: string): string {
 	const maxDecimals = 10;

@@ -16,12 +16,15 @@ function parseInputValue(s: string): number {
 	return Number.isNaN(n) ? 0 : n;
 }
 
+type Currency = (typeof CURRENCIES)[number];
+
 type CurrencyAmountInputProps = {
 	label?: string;
-	currency: (typeof CURRENCIES)[number];
-	onCurrencyChange: (currency: (typeof CURRENCIES)[number]) => void;
+	currency: Currency;
+	onCurrencyChange: (currency: Currency) => void;
 	amount: number;
 	onAmountChange: (amount: number) => void;
+	currencies?: readonly Currency[];
 	placeholder?: string;
 	prefix?: string;
 	id?: string;
@@ -34,6 +37,7 @@ export function CurrencyAmountInput({
 	onCurrencyChange,
 	amount,
 	onAmountChange,
+	currencies = CURRENCIES,
 	placeholder = "0,00",
 	prefix = "$",
 	id: idProp,
@@ -81,11 +85,11 @@ export function CurrencyAmountInput({
 						aria-label="Moneda"
 						value={currency}
 						onChange={(e) =>
-							onCurrencyChange(e.target.value as (typeof CURRENCIES)[number])
+							onCurrencyChange(e.target.value as Currency)
 						}
 						className={styles.select}
 					>
-						{CURRENCIES.map((c) => (
+						{currencies.map((c) => (
 							<option key={c} value={c}>
 								{c}
 							</option>

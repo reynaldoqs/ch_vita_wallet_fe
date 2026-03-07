@@ -32,3 +32,17 @@
 .error {
 	color: var(--color-red);
 }
+
+.summaryHeader {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 24px;
+
+	button {
+		padding: 0;
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+}

@@ -21,9 +21,9 @@ export const pricePairSchema = z.object({
 });
 export const assetPricesSchema = z.record(z.string(), pricePairSchema);
 export const pricesSchema = z.object({
-	btc: assetPricesSchema,
-	usdc: assetPricesSchema,
-	usdt: assetPricesSchema,
+	BTC: assetPricesSchema,
+	USDC: assetPricesSchema,
+	USDT: assetPricesSchema,
 });
 export const pricesResponseSchema = z.object({
 	prices: pricesSchema,
@@ -61,3 +61,18 @@ export const transactionsResponseSchema = z.object({
 export type Transaction = z.infer<typeof transactionSchema>;
 export type TransactionsMeta = z.infer<typeof transactionsMetaSchema>;
 export type TransactionsResponse = z.infer<typeof transactionsResponseSchema>;
+
+/** Exchange request body */
+export const exchangeRequestBodySchema = z.object({
+	from_currency: z.string(),
+	to_currency: z.string(),
+	from_amount: z.number(),
+});
+
+export type ExchangeRequestBody = z.infer<typeof exchangeRequestBodySchema>;
+
+export const exchangeResponseSchema = z.object({
+	transaction: transactionSchema,
+});
+
+export type ExchangeResponse = z.infer<typeof exchangeResponseSchema>;

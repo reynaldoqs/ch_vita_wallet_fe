@@ -3,6 +3,8 @@ import type { RootState } from "@/store";
 import {
 	type Balance,
 	balanceSchema,
+	type ExchangeRequestBody,
+	type ExchangeResponse,
 	type PricesResponse,
 	pricesResponseSchema,
 	type TransactionsResponse,
@@ -54,8 +56,21 @@ export const walletService = createApi({
 				return parsed.data;
 			},
 		}),
+		exchange: builder.mutation<ExchangeResponse, ExchangeRequestBody>({
+			query: (body) => {
+				return {
+					url: "exchange",
+					method: "POST",
+					body: body,
+				};
+			},
+		}),
 	}),
 });
 
-export const { useBalancesQuery, useCurrencyRatesQuery, useTransactionsQuery } =
-	walletService;
+export const {
+	useBalancesQuery,
+	useCurrencyRatesQuery,
+	useTransactionsQuery,
+	useExchangeMutation,
+} = walletService;

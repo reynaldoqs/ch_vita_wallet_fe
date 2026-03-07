@@ -1,0 +1,81 @@
+.backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: backdropIn 0.2s ease-out forwards;
+}
+
+.backdropButton {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	border: none;
+	background: rgba(1, 14, 17, 0.5);
+	backdrop-filter: blur(4px);
+	cursor: pointer;
+}
+
+.backdropExit {
+	animation: backdropOut 0.2s ease-in forwards;
+}
+
+.content {
+	position: relative;
+	z-index: 1;
+	background: var(--color-white);
+	border-radius: 12px;
+	box-shadow: 0 12px 40px rgba(1, 14, 17, 0.2);
+	max-width: min(90vw, 420px);
+	max-height: 85vh;
+	overflow: auto;
+	animation: contentIn 0.2s ease-out forwards;
+}
+
+.contentExit {
+	animation: contentOut 0.2s ease-in forwards;
+}
+
+@keyframes backdropIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes backdropOut {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes contentIn {
+	from {
+		opacity: 0;
+		transform: scale(0.96) translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+@keyframes contentOut {
+	from {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.96) translateY(-8px);
+	}
+}
