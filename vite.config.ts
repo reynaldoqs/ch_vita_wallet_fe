@@ -17,4 +17,5 @@ export default defineConfig({
 			},
 		}),
 	],
+	base: process.env.VITE_BASE_PATH || "/ch_vita_wallet_fe",
 });
