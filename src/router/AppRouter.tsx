@@ -1,20 +1,27 @@
+import { lazy, Suspense } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ExchangePage, PricesPage } from "@/features/dashboard";
-import { DashboardLayout } from "@/features/dashboard/components";
-import { HomePage } from "@/features/dashboard/views/HomePage";
-import { SignInPage } from "../features/auth/views/SignInPage";
-import { SignUpPage } from "../features/auth/views/SignUpPage";
 import { PrivateRoute } from "./PrivateRoute";
 
+const SignInPage = lazy(() => import("@/features/auth/views/SignInPage").then((m) => ({ default: m.SignInPage })));
+const SignUpPage = lazy(() => import("@/features/auth/views/SignUpPage").then((m) => ({ default: m.SignUpPage })));
+const DashboardLayout = lazy(() => import("@/features/dashboard/components/templates/DashboardLayout/DashboardLayout").then((m) => ({ default: m.DashboardLayout })));
+const HomePage = lazy(() => import("@/features/dashboard/views/HomePage").then((m) => ({ default: m.HomePage })));
+const PricesPage = lazy(() => import("@/features/dashboard/views/PricesPage").then((m) => ({ default: m.PricesPage })));
+const ExchangePage = lazy(() => import("@/features/dashboard/views/ExchangePage").then((m) => ({ default: m.ExchangePage })));
+
+const Page = ({ children }: { children: React.ReactNode }) => (
+	<Suspense fallback={null}>{children}</Suspense>
+);
+
 const router = createBrowserRouter([
-	{ path: "/signin", element: <SignInPage /> },
-	{ path: "/signup", element: <SignUpPage /> },
+	{ path: "/signin", element: <Page><SignInPage /></Page> },
+	{ path: "/signup", element: <Page><SignUpPage /></Page> },
 	{
 		element: <PrivateRoute />,
 		children: [
 			{
 				path: "/",
-				element: <DashboardLayout />,
+				element: <Page><DashboardLayout /></Page>,
 				children: [
 					{ index: true, element: <HomePage /> },
 					{ path: "precios", element: <PricesPage /> },

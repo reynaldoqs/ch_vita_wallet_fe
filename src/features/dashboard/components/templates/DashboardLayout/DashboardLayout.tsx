@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { AsideNavigation } from "../../organisms";
 import styles from "./DashboardLayout.module.css";
@@ -7,7 +8,9 @@ export function DashboardLayout() {
 		<div className={styles.layout}>
 			<AsideNavigation />
 			<main className={styles.main}>
-				<Outlet />
+				<Suspense fallback={null}>
+					<Outlet />
+				</Suspense>
 			</main>
 		</div>
 	);
