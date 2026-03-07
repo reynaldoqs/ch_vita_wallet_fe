@@ -1,4 +1,4 @@
-import { Activity, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sileo } from "sileo";
 import {
@@ -10,7 +10,7 @@ import {
 } from "@/components/atoms";
 import { useExchangeRatesSync } from "@/hooks";
 import { useExchangeMutation } from "@/services/walletService";
-import type { ExchangeRequestBody, ExchangeResponse } from "@/types";
+import type { ExchangeRequestBody } from "@/types";
 import { CURRENCIES } from "@/utils";
 import { formatCurrency } from "@/utils/currency";
 import { getErrorMessage } from "@/utils/error";
@@ -81,76 +81,74 @@ export function ExchangeForm() {
 		navigate(-1);
 	};
 
+	const isExchange = currentPhase === "exchange";
+
 	return (
 		<>
-			<Activity
-				key="exchange"
-				mode={currentPhase === "exchange" ? "visible" : "hidden"}
-			>
-				<form className={styles.form} onSubmit={(e) => e.preventDefault()}>
-					<Typography variant="subtitle1" as="h1" className={styles.title}>
-						¿Qué deseas intercambiar?
-					</Typography>
-
-					<Typography variant="body" className={styles.balance}>
-						Saldo disponible: {formatCurrency(availableBalance, fromCurrency)}{" "}
-						{fromCurrency}
-					</Typography>
-
-					<CurrencyAmountInput
-						label="Monto a intercambiar"
-						currency={fromCurrency}
-						onCurrencyChange={setFromCurrency}
-						amount={fromAmount}
-						onAmountChange={setFromAmount}
-						currencies={CURRENCIES}
-						placeholder="0,00"
-						prefix=""
-					/>
-
-					<div className={styles.rate}>
-						<Typography variant="caption2" as="span">
-							Tasa: 1 {fromCurrency} = {rate} {toCurrency}
+			<div>
+				<div style={{ display: isExchange ? "block" : "none" }}>
+					<form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+						<Typography variant="subtitle1" as="h1" className={styles.title}>
+							¿Qué deseas intercambiar?
 						</Typography>
-						<Typography variant="caption2" as="span">
-							Valido hasta {formattedValidUntil}
+
+						<Typography variant="body" className={styles.balance}>
+							Saldo disponible: {formatCurrency(availableBalance, fromCurrency)}{" "}
+							{fromCurrency}
+						</Typography>
+
+						<CurrencyAmountInput
+							label="Monto a intercambiar"
+							currency={fromCurrency}
+							onCurrencyChange={setFromCurrency}
+							amount={fromAmount}
+							onAmountChange={setFromAmount}
+							currencies={CURRENCIES}
+							placeholder="0,00"
+							prefix=""
+						/>
+
+						<div className={styles.rate}>
+							<Typography variant="caption2" as="span">
+								Tasa: 1 {fromCurrency} = {rate} {toCurrency}
+							</Typography>
+							<Typography variant="caption2" as="span">
+								Valido hasta {formattedValidUntil}
+							</Typography>
+						</div>
+						<CurrencyAmountInput
+							label="Voy a recibir"
+							currency={toCurrency}
+							onCurrencyChange={setToCurrency}
+							amount={toAmount}
+							onAmountChange={setToAmount}
+							currencies={toOptions}
+							placeholder="0,00"
+							prefix=""
+						/>
+						{!canContinue && fromAmount > 0 ? (
+							<Typography variant="caption2" as="span" className={styles.error}>
+								No tienes suficiente saldo disponible
+							</Typography>
+						) : null}
+					</form>
+				</div>
+				<div style={{ display: isExchange ? "none" : "block" }}>
+					<div className={styles.summaryHeader}>
+						<button type="button" onClick={() => setCurrentPhase("exchange")}>
+							<Icon name="arrowLeft" />
+						</button>
+						<Typography variant="subtitle1" as="h1" className={styles.title}>
+							Resumen de transacción
 						</Typography>
 					</div>
-					<CurrencyAmountInput
-						label="Voy a recibir"
-						currency={toCurrency}
-						onCurrencyChange={setToCurrency}
-						amount={toAmount}
-						onAmountChange={setToAmount}
-						currencies={toOptions}
-						placeholder="0,00"
-						prefix=""
+					<ExchangeSummaryCard
+						sourceAmount={`${formatCurrency(fromAmount, fromCurrency)} ${fromCurrency}`}
+						exchangeRate={`1 ${fromCurrency} = ${rate} ${toCurrency}`}
+						receivedAmount={`${formatCurrency(toAmount, toCurrency)} ${toCurrency}`}
 					/>
-					{!canContinue && fromAmount > 0 ? (
-						<Typography variant="caption2" as="span" className={styles.error}>
-							No tienes suficiente saldo disponible
-						</Typography>
-					) : null}
-				</form>
-			</Activity>
-			<Activity
-				key="confirm"
-				mode={currentPhase === "confirm" ? "visible" : "hidden"}
-			>
-				<div className={styles.summaryHeader}>
-					<button type="button" onClick={() => setCurrentPhase("exchange")}>
-						<Icon name="arrowLeft" />
-					</button>
-					<Typography variant="subtitle1" as="h1" className={styles.title}>
-						Resumen de transacción
-					</Typography>
 				</div>
-				<ExchangeSummaryCard
-					sourceAmount={`${formatCurrency(fromAmount, fromCurrency)} ${fromCurrency}`}
-					exchangeRate={`1 ${fromCurrency} = ${rate} ${toCurrency}`}
-					receivedAmount={`${formatCurrency(toAmount, toCurrency)} ${toCurrency}`}
-				/>
-			</Activity>
+			</div>
 			<div className={styles.actions}>
 				<Button type="button" variant="secondary" onClick={handleBack}>
 					Atrás
