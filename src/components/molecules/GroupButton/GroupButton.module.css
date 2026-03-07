@@ -1,0 +1,35 @@
+.group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.option {
+	flex: 0 0 auto;
+	padding: 6px 12px;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.2;
+	border-radius: 6px;
+	border: 1px solid var(--color-gray2);
+	background: var(--color-white);
+	color: var(--color-black);
+	cursor: pointer;
+	transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.option:hover {
+	background: var(--color-gray3);
+	border-color: var(--color-gray2);
+}
+
+.option.selected {
+	background: var(--color-blue2);
+	border-color: var(--color-blue2);
+	color: var(--color-white);
+}
+
+.option.selected:hover {
+	background: var(--color-blue1);
+	border-color: var(--color-blue1);
+}

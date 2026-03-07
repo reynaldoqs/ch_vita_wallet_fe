@@ -1,22 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { Skeleton } from "@/components";
+import { GroupButton, Skeleton } from "@/components";
 import { Typography } from "@/components/atoms";
 import { useTransactionsQuery } from "@/services";
 import type { Transaction } from "@/types";
 import { TransactionRow } from "../../molecules";
 import styles from "./TransactionHistory.module.css";
 
-const PER_PAGE = 10;
+const STATUS_OPTIONS = [
+	{ value: "completed", label: "Completado" },
+	{ value: "pending", label: "Pendiente" },
+	{ value: "rejected", label: "Rechazado" },
+];
 
 export function TransactionHistory() {
 	const [page, setPage] = useState(1);
+	const [status, setStatus] = useState<string | undefined>(undefined);
 	const [allTransactions, setAllTransactions] = useState<Transaction[]>([]);
 	const mergedPageRef = useRef(0);
 
 	const { data, isLoading, isFetching } = useTransactionsQuery({
 		page,
-		per_page: PER_PAGE,
+		status,
 	});
 
 	const meta = data?.meta;
@@ -38,12 +43,25 @@ export function TransactionHistory() {
 		if (!isFetching && hasMore) setPage((p) => p + 1);
 	};
 
+	const handleStatusChange = (status: string | null) => {
+		setPage(1);
+		setAllTransactions([]);
+		setStatus(status ?? undefined);
+	};
+
 	return (
 		<Skeleton loading={isLoading && page === 1}>
 			<section className={styles.container}>
-				<Typography variant="subtitle2" as="h2">
-					Historial
-				</Typography>
+				<div className={styles.header}>
+					<Typography variant="subtitle2" as="h2">
+						Historial
+					</Typography>
+					<GroupButton
+						options={STATUS_OPTIONS}
+						value={status}
+						onChange={handleStatusChange}
+					/>
+				</div>
 				{allTransactions.length === 0 && !isLoading ? (
 					<ul className={styles.list} aria-label="Historial de transacciones">
 						<li>

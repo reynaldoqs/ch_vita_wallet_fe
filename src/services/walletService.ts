@@ -40,10 +40,16 @@ export const walletService = createApi({
 		}),
 		transactions: builder.query<
 			TransactionsResponse,
-			{ page?: number; per_page?: number }
+			{ page?: number; per_page?: number; status?: string }
 		>({
-			query: ({ page = 1, per_page = 20 } = {}) =>
-				`transactions?page=${page}&per_page=${per_page}`,
+			query: ({ page = 1, per_page = 10, status } = {}) => {
+				const params = new URLSearchParams({
+					page: String(page),
+					per_page: String(per_page),
+				});
+				if (status) params.set("status", status);
+				return `transactions?${params.toString()}`;
+			},
 			keepUnusedDataFor: 0,
 			transformResponse: (response: unknown) => {
 				const parsed = transactionsResponseSchema.safeParse(response);

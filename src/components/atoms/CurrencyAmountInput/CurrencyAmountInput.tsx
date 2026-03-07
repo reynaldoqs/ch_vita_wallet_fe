@@ -84,9 +84,7 @@ export function CurrencyAmountInput({
 					<select
 						aria-label="Moneda"
 						value={currency}
-						onChange={(e) =>
-							onCurrencyChange(e.target.value as Currency)
-						}
+						onChange={(e) => onCurrencyChange(e.target.value as Currency)}
 						className={styles.select}
 					>
 						{currencies.map((c) => (
