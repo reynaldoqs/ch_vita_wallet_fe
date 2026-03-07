@@ -1,0 +1,52 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+.list {
+	display: flex;
+	flex-direction: column;
+}
+
+.row {
+	padding: 12px 0;
+	border-bottom: 1px solid var(--color-gray2);
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+	gap: 16px;
+}
+
+.header {
+	padding: 12px 0;
+	border-bottom: 2px solid var(--color-gray2);
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+	gap: 16px;
+	font-weight: 600;
+}
+
+.pair {
+	text-transform: uppercase;
+}
+
+.buy {
+	color: var(--color-blue2);
+}
+
+.sell {
+	color: var(--color-gray1);
+}
+
+.empty {
+	color: var(--color-gray1);
+	padding: 24px 0;
+	grid-column: 1 / -1;
+}
+
+.validUntil {
+	color: var(--color-gray1);
+	margin-bottom: 8px;
+}

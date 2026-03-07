@@ -22,8 +22,11 @@ export function AsideNavigation() {
 			<NavLink to="#">
 				<Typography variant="subtitle2">Transferir</Typography>
 			</NavLink>
-			<NavLink to="#">
-				<Typography variant="subtitle2">Recargar</Typography>
+			<NavLink
+				to="/precios"
+				className={({ isActive }) => (isActive ? styles.active : "")}
+			>
+				<Typography variant="subtitle2">Precios</Typography>
 			</NavLink>
 
 			<NavLink

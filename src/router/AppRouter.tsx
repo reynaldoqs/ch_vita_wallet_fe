@@ -1,5 +1,5 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ExchangePage } from "@/features/dashboard";
+import { ExchangePage, PricesPage } from "@/features/dashboard";
 import { DashboardLayout } from "@/features/dashboard/components";
 import { HomePage } from "@/features/dashboard/views/HomePage";
 import { SignInPage } from "../features/auth/views/SignInPage";
@@ -17,6 +17,7 @@ const router = createBrowserRouter([
 				element: <DashboardLayout />,
 				children: [
 					{ index: true, element: <HomePage /> },
+					{ path: "precios", element: <PricesPage /> },
 					{ path: "intercambiar", element: <ExchangePage /> },
 				],
 			},
