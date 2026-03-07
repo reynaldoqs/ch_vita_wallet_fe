@@ -1,9 +1,9 @@
-import { ExchangeLayout, PricesList } from "../components";
+import { PricesLayout, PricesList } from "../components";
 
 export function PricesPage() {
 	return (
-		<ExchangeLayout>
+		<PricesLayout>
 			<PricesList />
-		</ExchangeLayout>
+		</PricesLayout>
 	);
 }
