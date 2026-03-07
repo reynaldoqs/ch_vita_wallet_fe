@@ -46,3 +46,10 @@
 		cursor: pointer;
 	}
 }
+
+.successModal {
+	padding: 62px 82px 0;
+	border-radius: 6px;
+	text-align: center;
+	position: relative;
+}

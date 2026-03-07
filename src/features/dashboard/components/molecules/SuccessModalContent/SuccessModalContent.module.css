@@ -1,0 +1,29 @@
+.close {
+	position: absolute;
+	top: 16px;
+	right: 16px;
+	padding: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+}
+
+.illustration {
+	width: 100%;
+	max-width: 228px;
+	height: auto;
+	margin: 0 auto 24px;
+	display: block;
+}
+
+.title {
+	display: block;
+	margin-top: 32px;
+	color: var(--color-blue1);
+}
+
+.description {
+	display: block;
+	margin-top: 16px;
+	margin-bottom: 64px;
+}

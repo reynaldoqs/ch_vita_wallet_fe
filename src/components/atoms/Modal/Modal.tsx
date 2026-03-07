@@ -16,14 +16,16 @@ export function Modal({ open, onClose, children, className }: ModalProps) {
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(
 		undefined,
 	);
+	const prevOpenRef = useRef(open);
 
 	useEffect(() => {
-		if (!open) {
+		if (prevOpenRef.current && !open) {
 			setExiting(true);
 			timeoutRef.current = setTimeout(() => {
 				setExiting(false);
 			}, ANIMATION_MS);
 		}
+		prevOpenRef.current = open;
 		return () => clearTimeout(timeoutRef.current);
 	}, [open]);
 

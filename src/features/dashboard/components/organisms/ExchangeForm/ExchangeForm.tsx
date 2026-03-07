@@ -14,7 +14,7 @@ import type { ExchangeRequestBody, ExchangeResponse } from "@/types";
 import { CURRENCIES } from "@/utils";
 import { formatCurrency } from "@/utils/currency";
 import { getErrorMessage } from "@/utils/error";
-import { ExchangeSummaryCard } from "../../molecules";
+import { ExchangeSummaryCard, SuccessModalContent } from "../../molecules";
 import styles from "./ExchangeForm.module.css";
 
 const PHASES = ["exchange", "confirm"] as const;
@@ -54,8 +54,7 @@ export function ExchangeForm() {
 				from_amount: fromAmount,
 			};
 			sileo.promise(exchange(requestBody).unwrap(), {
-				success: (response: ExchangeResponse) => {
-					console.log("response", response);
+				success: () => {
 					setShowModal(true);
 					return {
 						title: "Transacción exitosa",
@@ -75,6 +74,11 @@ export function ExchangeForm() {
 				},
 			});
 		}
+	};
+
+	const handleSuccess = () => {
+		setShowModal(false);
+		navigate(-1);
 	};
 
 	return (
@@ -142,9 +146,9 @@ export function ExchangeForm() {
 					</Typography>
 				</div>
 				<ExchangeSummaryCard
-					sourceAmount={formatCurrency(fromAmount, fromCurrency)}
+					sourceAmount={`${formatCurrency(fromAmount, fromCurrency)} ${fromCurrency}`}
 					exchangeRate={`1 ${fromCurrency} = ${rate} ${toCurrency}`}
-					receivedAmount={formatCurrency(toAmount, toCurrency)}
+					receivedAmount={`${formatCurrency(toAmount, toCurrency)} ${toCurrency}`}
 				/>
 			</Activity>
 			<div className={styles.actions}>
@@ -157,16 +161,18 @@ export function ExchangeForm() {
 					disabled={!canContinue || isExchanging}
 					onClick={handleContinue}
 				>
-					Continuar
+					{currentPhase === "exchange" ? "Continuar" : "Intercambiar"}
 				</Button>
 			</div>
-			<Modal open={showModal} onClose={() => setShowModal(false)}>
-				<Typography variant="subtitle1" as="h2" className={styles.modalTitle}>
-					Transacción exitosa
-				</Typography>
-				<Typography variant="body" className={styles.modalDescription}>
-					Tu transacción ha sido completada correctamente
-				</Typography>
+			<Modal
+				open={showModal}
+				onClose={handleSuccess}
+				className={styles.successModal}
+			>
+				<SuccessModalContent
+					onClose={handleSuccess}
+					receivedCurrency={toCurrency}
+				/>
 			</Modal>
 		</>
 	);

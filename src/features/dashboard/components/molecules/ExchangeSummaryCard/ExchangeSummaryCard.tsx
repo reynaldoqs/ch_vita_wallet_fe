@@ -15,7 +15,7 @@ export function ExchangeSummaryCard({
 	return (
 		<article className={styles.card}>
 			<div className={styles.row}>
-				<Typography variant="body" as="span">
+				<Typography variant="caption1" as="span">
 					Monto a intercambiar
 				</Typography>
 				<Typography variant="body" as="span" className={styles.value}>
@@ -23,7 +23,7 @@ export function ExchangeSummaryCard({
 				</Typography>
 			</div>
 			<div className={styles.row}>
-				<Typography variant="body" as="span">
+				<Typography variant="caption1" as="span">
 					Tasa de cambio
 				</Typography>
 				<Typography variant="body" as="span" className={styles.value}>
@@ -31,7 +31,7 @@ export function ExchangeSummaryCard({
 				</Typography>
 			</div>
 			<div className={styles.row}>
-				<Typography variant="body" as="span">
+				<Typography variant="caption1" as="span">
 					Total a recibir
 				</Typography>
 				<Typography variant="body" as="span" className={styles.received}>

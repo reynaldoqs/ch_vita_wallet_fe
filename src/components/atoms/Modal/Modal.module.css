@@ -30,9 +30,9 @@
 	background: var(--color-white);
 	border-radius: 12px;
 	box-shadow: 0 12px 40px rgba(1, 14, 17, 0.2);
-	max-width: min(90vw, 420px);
-	max-height: 85vh;
-	overflow: auto;
+	max-width: min(90vw, 480px);
+	height: fit-content;
+	overflow: hidden;
 	animation: contentIn 0.2s ease-out forwards;
 }
 
