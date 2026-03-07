@@ -38,8 +38,12 @@ export const walletService = createApi({
 				return parsed.data;
 			},
 		}),
-		transactions: builder.query<TransactionsResponse, void>({
-			query: () => "transactions",
+		transactions: builder.query<
+			TransactionsResponse,
+			{ page?: number; per_page?: number }
+		>({
+			query: ({ page = 1, per_page = 20 } = {}) =>
+				`transactions?page=${page}&per_page=${per_page}`,
 			keepUnusedDataFor: 0,
 			transformResponse: (response: unknown) => {
 				const parsed = transactionsResponseSchema.safeParse(response);
