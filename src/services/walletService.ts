@@ -3,8 +3,8 @@ import type { RootState } from "@/store";
 import {
 	type Balance,
 	balanceSchema,
-	type CurrencyRates,
-	currencyRatesSchema,
+	type PricesResponse,
+	pricesResponseSchema,
 	type TransactionsResponse,
 	transactionsResponseSchema,
 } from "@/types";
@@ -45,11 +45,11 @@ export const walletService = createApi({
 				return parsed.data;
 			},
 		}),
-		currencyRates: builder.query<CurrencyRates, void>({
+		currencyRates: builder.query<PricesResponse, void>({
 			query: () => "prices",
-			keepUnusedDataFor: 60 * 60 * 2, // 2 hours
+			keepUnusedDataFor: 60 * 60 * 2,
 			transformResponse: (response: unknown) => {
-				const parsed = currencyRatesSchema.safeParse(response);
+				const parsed = pricesResponseSchema.safeParse(response);
 				if (!parsed.success) throw new Error(getZodErrorMessage(parsed.error));
 				return parsed.data;
 			},

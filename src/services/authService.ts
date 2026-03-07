@@ -3,11 +3,9 @@ import { setToken, setUser } from "@/store/auth/authSlice";
 import {
 	type LoginRequest,
 	type LoginResponse,
-	loginRequestSchema,
 	loginResponseSchema,
 	type SignUpRequest,
 	type SignUpResponse,
-	signUpRequestSchema,
 	signUpResponseSchema,
 } from "@/types";
 import { getZodErrorMessage } from "@/utils/error";
@@ -18,14 +16,10 @@ export const authService = createApi({
 	endpoints: (builder) => ({
 		login: builder.mutation<LoginResponse, LoginRequest>({
 			query: (body) => {
-				const parsedBody = loginRequestSchema.safeParse(body);
-				if (!parsedBody.success)
-					throw new Error(getZodErrorMessage(parsedBody.error));
-
 				return {
 					url: "auth/login",
 					method: "POST",
-					body: parsedBody.data,
+					body: body,
 				};
 			},
 			transformResponse: (response: LoginResponse) => {
@@ -43,14 +37,10 @@ export const authService = createApi({
 		}),
 		signUp: builder.mutation<SignUpResponse, SignUpRequest>({
 			query: (body) => {
-				const parsedBody = signUpRequestSchema.safeParse(body);
-				if (!parsedBody.success)
-					throw new Error(getZodErrorMessage(parsedBody.error));
-
 				return {
 					url: "auth/register",
 					method: "POST",
-					body: parsedBody.data,
+					body: body,
 				};
 			},
 			transformResponse: (response: unknown) => {

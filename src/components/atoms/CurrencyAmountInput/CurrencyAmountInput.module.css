@@ -1,0 +1,86 @@
+.wrapper {
+	display: block;
+}
+
+.label {
+	display: block;
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--color-black);
+	margin-bottom: 0.375rem;
+	text-align: left;
+}
+
+.combo {
+	display: flex;
+	align-items: stretch;
+	border: 1px solid var(--color-gray2);
+	border-radius: 8px;
+	background: #fff;
+	overflow: hidden;
+}
+
+.combo:focus-within {
+	border-color: var(--color-blue2);
+}
+
+.selectWrap {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0 0.5rem 0 0.75rem;
+	min-width: 4rem;
+	border-right: 1px solid var(--color-gray2);
+}
+
+.flag {
+	flex-shrink: 0;
+	border-radius: 50%;
+}
+
+.chevron {
+	width: 1rem;
+	height: 1rem;
+	color: var(--color-black);
+	pointer-events: none;
+}
+
+.select {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	cursor: pointer;
+	width: 100%;
+}
+
+.inputWrap {
+	position: relative;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	min-width: 0;
+}
+
+.prefix {
+	padding-left: 0.75rem;
+	font-size: 16px;
+	color: var(--color-black);
+}
+
+.input {
+	flex: 1;
+	height: 2.75rem;
+	padding: 0 1rem 0 0.25rem;
+	font-size: 16px;
+	color: var(--color-black);
+	background: transparent;
+	border: none;
+	outline: none;
+	box-sizing: border-box;
+	min-width: 0;
+}
+
+.input::placeholder {
+	color: var(--color-gray1);
+}

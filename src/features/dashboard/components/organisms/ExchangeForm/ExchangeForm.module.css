@@ -1,0 +1,34 @@
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	max-width: 100%;
+	height: 100%;
+	padding-bottom: 32px;
+}
+
+.balance {
+	color: var(--color-blue2);
+	margin-bottom: 16px;
+	margin-top: 16px;
+}
+
+.actions {
+	display: flex;
+	gap: 16px;
+	margin-top: auto;
+	padding-right: 180px;
+	button {
+		flex: 1;
+	}
+}
+
+.rate {
+	display: flex;
+	justify-content: space-between;
+	color: var(--color-gray1);
+}
+
+.error {
+	color: var(--color-red);
+}
