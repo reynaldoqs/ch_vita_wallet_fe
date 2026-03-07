@@ -24,13 +24,15 @@
   },
   "devDependencies": {
     "@biomejs/biome": "latest",
+    "@react-router/dev": "^7.13.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
+    "@vercel/react-router": "^1.2.5",
     "@vitejs/plugin-react": "^5.1.1",
     "babel-plugin-react-compiler": "^1.0.0",
     "typescript": "~5.9.3",
-    "vite": "^8.0.0-beta.13",
+    "vite": "link:@vercel/react-router/vite",
     "vite-plugin-webfont-dl": "^3.12.0"
   },
   "pnpm": {
