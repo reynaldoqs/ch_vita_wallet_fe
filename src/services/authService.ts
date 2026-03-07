@@ -12,7 +12,9 @@ import { getZodErrorMessage } from "@/utils/error";
 
 export const authService = createApi({
 	reducerPath: "auth-api",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/api/v1/" }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: `${import.meta.env.VITE_API_URL ?? "http://localhost:3000/api/v1"}/`,
+	}),
 	endpoints: (builder) => ({
 		login: builder.mutation<LoginResponse, LoginRequest>({
 			query: (body) => {
