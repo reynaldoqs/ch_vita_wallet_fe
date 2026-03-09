@@ -6,6 +6,7 @@ type RejectedPayload = { data?: { message?: string } };
 
 export const rtkQueryErrorLogger: Middleware = (_) => (next) => (action) => {
 	if (isRejectedWithValue(action)) {
+		// INFO: To log each error that comes from the backend
 		sileo.error({
 			title: "Backend error",
 			description:

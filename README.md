@@ -1,75 +1,108 @@
-# React + TypeScript + Vite
+# VitaWallet Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación frontend para VitaWallet.
 
-Currently, two official plugins are available:
+- **Producción:** [https://ch-vita-wallet-fe.vercel.app/](https://ch-vita-wallet-fe.vercel.app/)
+- **Backend repo:** [https://github.com/reynaldoqs/ch_vita_wallet_api](https://github.com/reynaldoqs/ch_vita_wallet_api)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 1. Setup
 
-## React Compiler
+```bash
+# Clonar el repositorio
+git clone <repo-url>
+cd vitawallet_fe
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+# Instalar dependencias
+pnpm install
 
-Note: This will impact Vite dev & build performances.
+# Configurar variables de entorno
+cp .env.example .env
+# Editar .env con la URL del backend:
+# VITE_API_URL=http://localhost:3000/api/v1
 
-## Expanding the ESLint configuration
+# Iniciar en desarrollo
+pnpm dev
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Correr tests
+pnpm test
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Build de producción
+pnpm build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 2. Decisiones técnicas
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Arquitectura modular con Atomic Design
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+El proyecto sigue una arquitectura modular basada en **features**, donde cada feature encapsula sus propios componentes, vistas y lógica. Los componentes se organizan siguiendo **Atomic Design**:
+
 ```
+src/
+├── components/          # Componentes compartidos
+│   ├── atoms/           # Button, Input, Icon, Typography, Modal, etc.
+│   └── molecules/       # FormField, GroupButton, Skeleton
+├── features/
+│   ├── auth/
+│   │   ├── components/
+│   │   │   ├── organisms/   # LoginForm, SignUpForm
+│   │   │   └── templates/   # AuthLayout
+│   │   └── views/
+│   └── dashboard/
+│       ├── components/
+│       │   ├── molecules/   # BalanceCard, PriceRows, TransactionRow, etc.
+│       │   ├── organisms/   # ExchangeForm, PricesList, UserBalance, etc.
+│       │   └── templates/   # DashboardLayout, HomeLayout, etc.
+│       └── views/
+├── services/            # RTK Query APIs (authService, walletService)
+├── store/               # Redux store, slices y middlewares
+├── types/               # Tipos y schemas Zod
+└── utils/               # Utilidades compartidas
+```
+
+### Servicios y validación con Zod en `transformResponse`
+
+Los servicios usan **RTK Query** para la comunicación con el backend. En cada endpoint se aplica un patrón de validación en `transformResponse` usando **Zod schemas**, lo que garantiza que la respuesta del backend cumple con el contrato esperado antes de llegar al estado de la app:
+
+```ts
+transformResponse: (response: unknown) => {
+  const parsed = signUpResponseSchema.safeParse(response);
+  if (!parsed.success) throw new Error(getZodErrorMessage(parsed.error));
+  return parsed.data;
+},
+```
+
+Si el backend devuelve un objeto inesperado, la app lo detecta de forma temprana y lanza un error controlado.
+
+### Redux con middlewares custom
+
+El store de Redux utiliza middlewares personalizados:
+
+- **`rtkSessionPersist`**: Escucha acciones de `setToken` y `logout` para persistir/limpiar la sesión en `localStorage` automáticamente.
+- **`rtkQueryErrorLogger`**: Intercepta errores de cualquier query/mutation rechazada y los notifica al usuario a través de `sileo`. Este middleware es el **punto ideal para integrar un servicio de error tracking** como DataDog, Sentry, etc., ya que centraliza todos los errores del backend en un solo lugar.
+
+### Sileo para notificaciones y UX
+
+Se usa [sileo](https://www.npmjs.com/package/sileo) como sistema de notificaciones para manejar errores, loading states y feedback al usuario de forma consistente en toda la aplicación.
+
+### Stack principal
+
+| Herramienta | Uso |
+|---|---|
+| React 19 + TypeScript | UI y tipado |
+| Vite | Build tool |
+| Redux Toolkit + RTK Query | Estado global y data fetching |
+| Zod | Validación de respuestas del backend |
+| React Router v7 | Routing |
+| Tanstack Form | Manejo de formularios |
+| Biome | Linting y formatting |
+| Vitest + Testing Library | Testing |
+| Sileo | Notificaciones (errores, loading, etc.) |
+
+## 3. Qué quedó pendiente
+
+- [ ] Completar cobertura de tests (unitarios y de integración)
+- [ ] Responsive design (actualmente optimizado para desktop)
+- [ ] Integrar servicio de error tracking (DataDog, Sentry) en el middleware `rtkQueryErrorLogger`
+- [ ] Manejo de refresh token y expiración de sesión
+- [ ] Agregar loading skeletons en más vistas
+- [ ] CI/CD pipeline con checks de lint y tests
