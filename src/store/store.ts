@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { useDispatch, useSelector } from "react-redux";
 import { authService, walletService } from "@/services";
 import { authReducer } from "./auth";
+import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
 
 export const store = configureStore({
 	reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
 		getDefaultMiddleware().concat(
 			authService.middleware,
 			walletService.middleware,
+			rtkQueryErrorLogger,
 		),
 });
 
