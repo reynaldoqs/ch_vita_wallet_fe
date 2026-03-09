@@ -14,7 +14,7 @@ export function UserBalance() {
 	const { user } = useAppSelector((state) => state.auth);
 	const flattenedBalances = flattenBalance(balances);
 	return (
-		<Skeleton loading={isLoading}>
+		<Skeleton loading={isLoading} data-testid="user-balance-skeleton">
 			<div className={styles.container}>
 				<h1 className={styles.title}>
 					<img src={coin} alt="User" />

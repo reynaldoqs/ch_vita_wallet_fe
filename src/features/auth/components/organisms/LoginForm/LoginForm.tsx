@@ -8,7 +8,7 @@ import { getErrorMessage } from "@/utils";
 import styles from "./LoginForm.module.css";
 
 export function LoginForm() {
-	const [login] = useLoginMutation();
+	const [login, { isLoading }] = useLoginMutation();
 	const navigate = useNavigate();
 
 	const form = useForm({
@@ -70,6 +70,7 @@ export function LoginForm() {
 							placeholder="juan@gmail.com"
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
+							disabled={isLoading}
 						/>
 					</div>
 				)}
@@ -84,6 +85,7 @@ export function LoginForm() {
 							placeholder="Escribe tu contraseña"
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
+							disabled={isLoading}
 						/>
 					</div>
 				)}
@@ -107,10 +109,12 @@ export function LoginForm() {
 							type="submit"
 							variant="primary"
 							expanded
-							disabled={isEmpty || !canSubmit || Boolean(isSubmitting)}
+							disabled={
+								isEmpty || !canSubmit || Boolean(isSubmitting) || isLoading
+							}
 							className={styles.action}
 						>
-							{isSubmitting ? "..." : "Iniciar sesión"}
+							Iniciar sesión
 						</Button>
 					);
 				}}

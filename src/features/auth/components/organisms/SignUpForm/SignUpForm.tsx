@@ -8,7 +8,7 @@ import { getErrorMessage } from "@/utils";
 import styles from "./SignUpForm.module.css";
 
 export function SignUpForm() {
-	const [signUp] = useSignUpMutation();
+	const [signUp, { isLoading }] = useSignUpMutation();
 	const navigate = useNavigate();
 
 	const form = useForm({
@@ -70,6 +70,7 @@ export function SignUpForm() {
 							placeholder="juan@gmail.com"
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
+							disabled={isLoading}
 						/>
 					</div>
 				)}
@@ -84,6 +85,7 @@ export function SignUpForm() {
 							placeholder="Mínimo 8 caracteres"
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
+							disabled={isLoading}
 						/>
 					</div>
 				)}
@@ -98,6 +100,7 @@ export function SignUpForm() {
 							placeholder="Repite tu contraseña"
 							value={field.state.value}
 							onChange={(e) => field.handleChange(e.target.value)}
+							disabled={isLoading}
 						/>
 					</div>
 				)}
@@ -128,10 +131,12 @@ export function SignUpForm() {
 							type="submit"
 							variant="primary"
 							expanded
-							disabled={isEmpty || !canSubmit || Boolean(isSubmitting)}
+							disabled={
+								isEmpty || !canSubmit || Boolean(isSubmitting) || isLoading
+							}
 							className={styles.action}
 						>
-							{isSubmitting ? "..." : "Crear cuenta"}
+							Crear cuenta
 						</Button>
 					);
 				}}
