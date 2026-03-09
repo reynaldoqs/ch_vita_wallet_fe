@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authService, walletService } from "@/services";
 import { authReducer } from "./auth";
 import { rtkQueryErrorLogger } from "./middlewares/rtkQueryErrorLogger";
+import { rtkSessionPersist } from "./middlewares/rtkSessionPersist";
 
 export const store = configureStore({
 	reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
 		getDefaultMiddleware().concat(
 			authService.middleware,
 			walletService.middleware,
+			rtkSessionPersist.middleware,
 			rtkQueryErrorLogger,
 		),
 });

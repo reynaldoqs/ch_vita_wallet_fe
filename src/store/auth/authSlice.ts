@@ -6,7 +6,16 @@ export interface AuthState {
 	token: string | null;
 }
 
-const initialState: AuthState = { user: null, token: null };
+const persistedToken = (() => {
+	try {
+		const raw = localStorage.getItem("session");
+		return raw ? (JSON.parse(raw) as string) : null;
+	} catch {
+		return null;
+	}
+})();
+
+const initialState: AuthState = { user: null, token: persistedToken };
 
 const authSlice = createSlice({
 	name: "auth",
