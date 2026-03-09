@@ -34,8 +34,11 @@ export function getConvertedAmount(
 	return 0;
 }
 
-export function formatCurrency(amount: number, currency: string): string {
-	const maxDecimals = 10;
+export function formatCurrency(
+	amount: number,
+	currency: string,
+	maxDecimals = 10,
+): string {
 	const fixed = amount.toFixed(maxDecimals);
 	const [intStr, decStr] = fixed.split(".");
 	const decTrimmed = decStr.replace(/0+$/, "") || "00";
